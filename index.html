@@ -412,13 +412,16 @@ enterBtn.addEventListener('click', () => {
   }, 800);
 });
 
-/* === Storytelling Scroll Adaptatif === */
+/* === Storytelling Scroll FIABLE === */
 window.addEventListener('scroll', () => {
   const story = document.getElementById('story');
-  // Si mobile : déclenche plus tôt, sinon plus tard
-  const triggerOffset = window.innerWidth < 768 ? 0 : 100;
+  const rect = story.getBoundingClientRect();
 
-  if (window.scrollY + window.innerHeight > story.offsetTop + triggerOffset) {
+  // calcule le seuil selon l’écran
+  const triggerOffset = window.innerWidth < 768 ? 0.2 : 0.3; // 20% sur mobile, 30% sur PC
+
+  // Si la partie supérieure du bloc est visible à au moins triggerOffset de la hauteur de l’écran
+  if (rect.top < window.innerHeight * (1 - triggerOffset)) {
     story.classList.add('visible');
   }
 });
