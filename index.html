@@ -405,9 +405,13 @@ enterBtn.addEventListener('click', () => {
       transitionLoader.style.transition = "opacity 1s ease";
       transitionLoader.style.opacity = 0;
       setTimeout(() => {
-        transitionLoader.style.display = "none";
-        main.style.display = "block";
-      }, 1000);
+  transitionLoader.style.display = "none";
+  main.style.display = "block";
+
+  // make sure the story text appears after main is visible
+  const story = document.getElementById('story');
+  setTimeout(() => story.classList.add('visible'), 600);
+}, 1000);
     }, 3000);
   }, 800);
 });
