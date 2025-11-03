@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASTROW - Mini Drop</title>
 <style>
+  /* Reset */
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* Import police OTF */
   @font-face {
     font-family: 'AstrowFont';
     src: url('AstrowFont.ttf') format('opentype');
@@ -23,26 +25,44 @@
     overflow-x: hidden;
   }
 
-  #particles {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-    opacity: 0.7;
-    pointer-events: none;
-  }
+  /* === Canvas Particules === */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;        /* Toujours derrière */
+  opacity: 0.7;      /* Peut ajuster pour plus de visibilité */
+  pointer-events: none; /* Pour ne pas bloquer les clics */
+}
 
-  /* Loader */
+
+  /* Loader / Intro */
   #loader {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 999;
-    text-align: center;
-  }
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  /* background: #0a0a0a; <-- enlever ou réduire l'opacité */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  flex-direction: column;
+  text-align: center;; /* laisse passer le canvas derrière */
+}
+
+#transitionLoader {
+  display: none;
+  position: fixed;
+  inset: 0;
+  /* background: #0a0a0a; <-- enlever ou réduire l'opacité */
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 
   #logoContainer {
     display: flex;
@@ -65,14 +85,21 @@
   }
 
   @keyframes spin {
-    from { transform: rotate(0); }
-    to { transform: rotate(360deg); }
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
   }
 
   #loader p {
     margin-top: 20px;
     font-size: 25px;
     max-width: 400px;
+    opacity: 0;
+    animation: fadeIn 3s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px);}
+    100% { opacity: 1; transform: translateY(0);}
   }
 
   #enterBtn {
@@ -92,6 +119,7 @@
     color: #0a0a0a;
   }
 
+  /* Chargement après clic */
   #transitionLoader {
     display: none;
     position: fixed;
@@ -109,13 +137,15 @@
     animation: spin 2s linear infinite;
   }
 
+  /* Main section */
   #main {
     display: none;
     width: 100%;
     min-height: 100vh;
-    text-align: center;
-    padding: 80px 20px;
     position: relative;
+    text-align: center;
+    overflow: hidden;
+    padding: 80px 20px;
     z-index: 1;
   }
 
@@ -124,6 +154,7 @@
     font-size: 2rem;
   }
 
+  /* Produits */
   .product-section {
     display: flex;
     justify-content: center;
@@ -172,6 +203,7 @@
     font-size: 1.3rem;
   }
 
+  /* Shine effet sur hover */
   .product::after {
     content: "";
     position: absolute;
@@ -187,8 +219,8 @@
   }
 
   @keyframes shine {
-    from { left: -75%; }
-    to { left: 125%; }
+    0% { left: -75%; }
+    100% { left: 125%; }
   }
 
   #ctaBtn {
@@ -208,12 +240,10 @@
     color: #0a0a0a;
   }
 
-  /* Story section - ALWAYS visible */
+  /* Storytelling section */
   #story {
     margin-top: 120px;
     opacity: 1;
-    transform: none;
-    transition: none;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
@@ -225,6 +255,7 @@
     margin-bottom: 20px;
   }
 
+  /* Pop-up Shop Now */
   #shopPopup {
     display: none;
     position: fixed;
@@ -258,8 +289,10 @@
 </head>
 <body>
 
+<!-- Canvas Particules -->
 <canvas id="particles"></canvas>
 
+<!-- Loader / Intro -->
 <div id="loader">
   <div id="logoContainer">
     <img src="ASTROW.png" alt="ASTROW Logo" class="logo">
@@ -269,19 +302,24 @@
   <button id="enterBtn">Enter ASTROW World</button>
 </div>
 
+<!-- Transition Loader -->
 <div id="transitionLoader">
   <div class="transition-star"></div>
 </div>
 
+<!-- Main Section -->
 <div id="main">
   <div id="heroText">The first spark of ASTROW – Mini Drop Bonnet</div>
 
   <section class="product-section">
+    <!-- Bonnet Noir -->
     <div class="product">
       <img src="blackbeaniefront.png" alt="Bonnet Noir Avant" class="front">
       <img src="blackbeanieback.png" alt="Bonnet Noir Dos" class="back">
       <h2>Black</h2>
     </div>
+
+    <!-- Bonnet Blanc -->
     <div class="product">
       <img src="whitebeaniefront.png" alt="Bonnet Blanc Avant" class="front">
       <img src="whitebeanieback.png" alt="Bonnet Blanc Dos" class="back">
@@ -291,6 +329,7 @@
 
   <button id="ctaBtn">Shop Now</button>
 
+  <!-- Storytelling -->
   <section id="story">
     <h2>ASTROW</h2>
     <p>Every drop expresses a chapter of growth.
@@ -300,16 +339,18 @@ It’s more than fashion; it’s your reminder to dream big, put in the work, an
   </section>
 </div>
 
+<!-- Pop-up Shop Now -->
 <div id="shopPopup">
   <h2>Ready to join ASTROW ?</h2>
   <button id="confirmShop">Yes !</button>
   <button id="cancelShop">Cancel</button>
 </div>
 
+<!-- Son d'ambiance -->
 <audio id="introSound" src="song.wav"></audio>
 
 <script>
-/* === Canvas étoiles === */
+  /* === Canvas Particules Amélioré === */
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -318,10 +359,10 @@ canvas.height = window.innerHeight;
 let stars = Array.from({ length: 100 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
-  r: Math.random() * 1.5 + 0.5,
-  speed: Math.random() * 0.5 + 0.05,
-  alpha: Math.random() * 0.5 + 0.5,
-  delta: Math.random() * 0.02 + 0.005
+  r: Math.random() * 1.5 + 0.5,        // taille variable
+  speed: Math.random() * 0.5 + 0.05,   // vitesse variable
+  alpha: Math.random() * 0.5 + 0.5,    // opacité initiale
+  delta: Math.random() * 0.02 + 0.005  // variation de pulsation
 }));
 
 let scrollOffset = 0;
@@ -329,11 +370,12 @@ let scrollOffset = 0;
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   stars.forEach(star => {
+    // scintillement
     star.alpha += star.delta;
     if (star.alpha > 1 || star.alpha < 0.3) star.delta = -star.delta;
     ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(star.alpha * 1.8, 1)})`;
-    ctx.shadowBlur = 8;
-    ctx.shadowColor = "white";
+ctx.shadowBlur = 8;             // effet de halo lumineux
+ctx.shadowColor = "white";      // halo blanc pur
     ctx.beginPath();
     ctx.arc(star.x, star.y + scrollOffset * 0.1, star.r, 0, 2 * Math.PI);
     ctx.fill();
@@ -344,55 +386,81 @@ function animate() {
 }
 animate();
 
+/* === Scroll Parallaxe === */
+window.addEventListener('scroll', () => {
+  scrollOffset = window.scrollY;
+});
+
+/* === Resize Canvas === */
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
 
-/* === Loader transition === */
-const enterBtn = document.getElementById('enterBtn');
-const loader = document.getElementById('loader');
-const main = document.getElementById('main');
-const transitionLoader = document.getElementById('transitionLoader');
-const introSound = document.getElementById('introSound');
 
-enterBtn.addEventListener('click', () => {
-  introSound.play();
-  loader.style.transition = "opacity 0.8s ease";
-  loader.style.opacity = 0;
-  setTimeout(() => {
-    loader.style.display = "none";
-    transitionLoader.style.display = "flex";
+  /* === Loader / Transition === */
+  const enterBtn = document.getElementById('enterBtn');
+  const loader = document.getElementById('loader');
+  const main = document.getElementById('main');
+  const transitionLoader = document.getElementById('transitionLoader');
+  const introSound = document.getElementById('introSound');
+
+  enterBtn.addEventListener('click', () => {
+    introSound.play();
+    loader.style.transition = "opacity 0.8s ease";
+    loader.style.opacity = 0;
     setTimeout(() => {
-      transitionLoader.style.transition = "opacity 1s ease";
-      transitionLoader.style.opacity = 0;
+      loader.style.display = "none";
+      transitionLoader.style.display = "flex";
       setTimeout(() => {
-        transitionLoader.style.display = "none";
-        main.style.display = "block"; // Le texte est déjà visible directement
-      }, 1000);
-    }, 2000);
-  }, 800);
-});
+        transitionLoader.style.transition = "opacity 1s ease";
+        transitionLoader.style.opacity = 0;
+        setTimeout(() => {
+          transitionLoader.style.display = "none";
+          main.style.display = "block";
+        }, 1000);
+      }, 3000);
+    }, 800);
+  });
 
-/* === Shop Popup === */
-const ctaBtn = document.getElementById('ctaBtn');
-const shopPopup = document.getElementById('shopPopup');
-const confirmShop = document.getElementById('confirmShop');
-const cancelShop = document.getElementById('cancelShop');
+  /* === Storytelling Scroll === */
+  window.addEventListener('scroll', () => {
+    const story = document.getElementById('story');
+    if (window.scrollY + window.innerHeight > story.offsetTop + 100) {
+      story.classList.add('visible');
+    }
+  });
 
-ctaBtn.addEventListener('click', () => {
-  shopPopup.style.display = 'flex';
-});
+  /* === Shop Now Popup === */
+  const ctaBtn = document.getElementById('ctaBtn');
+  const shopPopup = document.getElementById('shopPopup');
+  const confirmShop = document.getElementById('confirmShop');
+  const cancelShop = document.getElementById('cancelShop');
+
+  ctaBtn.addEventListener('click', () => {
+    shopPopup.style.display = 'flex';
+  });
 
 confirmShop.addEventListener('click', () => {
-  window.location.href = "https://yourshopifystore.com";
-});
+    window.location.href = "https://yourshopifystore.com";
+  });
 
-cancelShop.addEventListener('click', () => {
-  shopPopup.style.display = 'none';
-});
+  cancelShop.addEventListener('click', () => {
+    shopPopup.style.display = 'none';
+  });
 
-/* === Easter Egg Logo === */
+  /* === Easter Egg Logo Redirection === */
 const logoContainer = document.getElementById('logoContainer');
 let clickCount = 0;
-logoContainer.addEventListener('click', ()
+logoContainer.addEventListener('click', () => {
+  clickCount++;
+  if (clickCount === 3) {
+    // Redirection vers le lien secret
+    window.location.href = "https://tonliensecret.com";
+    clickCount = 0; // reset compteur
+  }
+});
+</script>
+
+</body>
+</html>
