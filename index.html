@@ -23,13 +23,13 @@
     background: #0a0a0a;
     color: #fff;
     overflow-x: hidden;
-    scroll-behavior: smooth;
   }
 
   /* === Canvas Particules === */
   #particles {
     position: fixed;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     z-index: 0;
@@ -48,8 +48,16 @@
     z-index: 999;
     flex-direction: column;
     text-align: center;
-    background: rgba(10,10,10,0.7);
-    transition: opacity 0.8s ease;
+  }
+
+  #transitionLoader {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 
   #logoContainer {
@@ -107,7 +115,6 @@
     color: #0a0a0a;
   }
 
-  /* Transition Loader */
   #transitionLoader {
     display: none;
     position: fixed;
@@ -116,9 +123,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: rgba(10,10,10,0.8);
-    opacity: 1;
-    transition: opacity 1s ease;
   }
 
   .transition-star {
@@ -194,7 +198,6 @@
     font-size: 1.3rem;
   }
 
-  /* Shine effet sur hover */
   .product::after {
     content: "";
     position: absolute;
@@ -231,7 +234,6 @@
     color: #0a0a0a;
   }
 
-  /* Storytelling section */
   #story {
     margin-top: 120px;
     opacity: 1;
@@ -246,7 +248,6 @@
     margin-bottom: 20px;
   }
 
-  /* Pop-up Shop Now */
   #shopPopup {
     display: none;
     position: fixed;
@@ -259,13 +260,6 @@
     color: #fff;
     text-align: center;
     padding: 20px;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  #shopPopup.show {
-    display: flex;
-    opacity: 1;
   }
 
   #shopPopup button {
@@ -283,24 +277,6 @@
     background: #fff;
     color: #0a0a0a;
   }
-
-  /* Responsive Design */
-  @media (max-width: 600px) {
-    .logo, .star {
-      width: 70px;
-      height: 70px;
-    }
-    #enterBtn, #ctaBtn {
-      font-size: 1rem;
-      padding: 10px 20px;
-    }
-    .product {
-      width: 180px;
-    }
-    #heroText {
-      font-size: 1.5rem;
-    }
-  }
 </style>
 </head>
 <body>
@@ -311,7 +287,7 @@
 <!-- Loader / Intro -->
 <div id="loader">
   <div id="logoContainer">
-    <img src="ASTROW.png" alt="ASTROW Logo" class="logo" loading="lazy">
+    <img src="ASTROW.png" alt="ASTROW Logo" class="logo">
     <div class="star"></div>
   </div>
   <p>Aim the stars.</p>
@@ -328,24 +304,21 @@
   <div id="heroText">The first spark of ASTROW – Mini Drop Beanie</div>
 
   <section class="product-section">
-    <!-- Bonnet Noir -->
     <div class="product">
-      <img src="blackbeaniefront.PNG" alt="Bonnet Noir Avant" class="front" loading="lazy">
-      <img src="blackbeanieback.png" alt="Bonnet Noir Dos" class="back" loading="lazy">
+      <img src="blackbeaniefront.PNG" alt="Bonnet Noir Avant" class="front">
+      <img src="blackbeanieback.png" alt="Bonnet Noir Dos" class="back">
       <h2>Black</h2>
     </div>
 
-    <!-- Bonnet Blanc -->
     <div class="product">
-      <img src="whitebeaniefront.png" alt="Bonnet Blanc Avant" class="front" loading="lazy">
-      <img src="whitebeanieback.png" alt="Bonnet Blanc Dos" class="back" loading="lazy">
+      <img src="whitebeaniefront.png" alt="Bonnet Blanc Avant" class="front">
+      <img src="whitebeanieback.png" alt="Bonnet Blanc Dos" class="back">
       <h2>White</h2>
     </div>
   </section>
 
   <button id="ctaBtn">Shop Now</button>
 
-  <!-- Storytelling -->
   <section id="story">
     <h2>ASTROW</h2>
     <p>Every drop expresses a chapter of growth.
@@ -355,7 +328,6 @@ It’s more than fashion; it’s your reminder to dream big, put in the work, an
   </section>
 </div>
 
-<!-- Pop-up Shop Now -->
 <div id="shopPopup">
   <h2>Ready to join ASTROW ?</h2>
   <button id="confirmShop">Yes !</button>
@@ -363,16 +335,15 @@ It’s more than fashion; it’s your reminder to dream big, put in the work, an
 </div>
 
 <script>
-/* === Canvas Particules Effet Galaxie === */
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let stars = Array.from({ length: 120 }, () => ({
+let stars = Array.from({ length: 100 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
-  r: Math.random() * 1.8 + 0.5,
+  r: Math.random() * 1.5 + 0.5,
   speed: Math.random() * 0.5 + 0.05,
   alpha: Math.random() * 0.5 + 0.5,
   delta: Math.random() * 0.02 + 0.005
@@ -385,7 +356,7 @@ function animate() {
   stars.forEach(star => {
     star.alpha += star.delta;
     if (star.alpha > 1 || star.alpha < 0.3) star.delta = -star.delta;
-    ctx.fillStyle = `hsla(${Math.random() * 60 + 180}, 100%, 80%, ${Math.min(star.alpha * 1.8, 1)})`;
+    ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(star.alpha * 1.8, 1)})`;
     ctx.shadowBlur = 8;
     ctx.shadowColor = "white";
     ctx.beginPath();
@@ -398,47 +369,51 @@ function animate() {
 }
 animate();
 
-/* === Scroll Parallaxe === */
 window.addEventListener('scroll', () => {
   scrollOffset = window.scrollY;
 });
 
-/* === Resize Canvas === */
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
 
-/* === Loader / Transition === */
 const enterBtn = document.getElementById('enterBtn');
 const loader = document.getElementById('loader');
 const main = document.getElementById('main');
 const transitionLoader = document.getElementById('transitionLoader');
 
 enterBtn.addEventListener('click', () => {
+  loader.style.transition = "opacity 0.8s ease";
   loader.style.opacity = 0;
   setTimeout(() => {
     loader.style.display = "none";
     transitionLoader.style.display = "flex";
-    transitionLoader.style.opacity = 1;
     setTimeout(() => {
+      transitionLoader.style.transition = "opacity 1s ease";
       transitionLoader.style.opacity = 0;
       setTimeout(() => {
         transitionLoader.style.display = "none";
         main.style.display = "block";
       }, 1000);
-    }, 2000);
+    }, 3000);
   }, 800);
 });
 
-/* === Shop Now Popup === */
+window.addEventListener('scroll', () => {
+  const story = document.getElementById('story');
+  if (window.scrollY + window.innerHeight > story.offsetTop + 100) {
+    story.classList.add('visible');
+  }
+});
+
 const ctaBtn = document.getElementById('ctaBtn');
 const shopPopup = document.getElementById('shopPopup');
 const confirmShop = document.getElementById('confirmShop');
 const cancelShop = document.getElementById('cancelShop');
 
 ctaBtn.addEventListener('click', () => {
-  shopPopup.classList.add('show');
+  shopPopup.style.display = 'flex';
 });
 
 confirmShop.addEventListener('click', () => {
@@ -446,10 +421,9 @@ confirmShop.addEventListener('click', () => {
 });
 
 cancelShop.addEventListener('click', () => {
-  shopPopup.classList.remove('show');
+  shopPopup.style.display = 'none';
 });
 
-/* === Easter Egg Logo Redirection === */
 const logoContainer = document.getElementById('logoContainer');
 let clickCount = 0;
 logoContainer.addEventListener('click', () => {
