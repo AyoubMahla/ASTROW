@@ -69,15 +69,8 @@ canvas {
 }
 
 #emailInput, #confirmBtn {
-  font-size:16px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:'AstrowFont'; font-size:16px;
 }
-
-#confirmBtn {
-  font-size:16px;
-  font-family: 'AstrowFont';
-}
-
 
 #emailInput {
   background:rgba(255,255,255,0.15);
@@ -171,6 +164,7 @@ canvas {
 </div>
 
 <script>
+/* --- Stars Animation --- */
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -201,11 +195,13 @@ function animate() {
 }
 animate();
 
+/* --- Form submission --- */
 const form = document.getElementById('registerForm');
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const checkbox = document.getElementById('consentCheckbox');
   const error = document.getElementById('errorMessage');
+  const email = document.getElementById('emailInput').value;
 
   if (!checkbox.checked) {
     error.textContent = 'You must consent.';
@@ -214,30 +210,52 @@ form.addEventListener('submit', async e => {
   }
 
   error.style.display = 'none';
-  const email = document.getElementById('emailInput').value;
 
+  // Confirmation animation
+  const content = document.getElementById('content');
+  const confirmation = document.createElement('div');
+  confirmation.style.cssText = `
+    font-size:24px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+    opacity:0;
+    transition: opacity 1s ease;
+  `;
+
+  const star = document.createElement('div');
+  star.className = 'star';
+  star.style.cssText = 'width:70px; height:70px; animation: spin 3s linear infinite;';
+  confirmation.appendChild(star);
+
+  const text = document.createElement('div');
+  text.textContent = 'Your email has been registered!';
+  confirmation.appendChild(text);
+
+  content.innerHTML = '';
+  content.appendChild(confirmation);
+  setTimeout(() => { confirmation.style.opacity = 1; }, 50);
+
+  // Send to Formspree
   try {
-    const res = await fetch('https://astrow-coomingsoon.vercel.app/api/saveEmail', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("https://formspree.io/f/mqawzyaj", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email })
     });
 
-    if (res.ok) {
-      document.getElementById('content').innerHTML =
-        '<div style="font-size:24px;">Your email has been registered!</div>';
-    } else {
+    if (!res.ok) {
       const data = await res.json();
-      error.textContent = data?.message || 'Error sending data.';
-      error.style.display = 'block';
+      error.textContent = data?.message || "Error sending data.";
+      error.style.display = "block";
     }
   } catch (err) {
-    error.textContent = 'Network error, please try again.';
-    error.style.display = 'block';
+    error.textContent = "Network error, please try again.";
+    error.style.display = "block";
     console.error(err);
   }
 });
 </script>
-
 </body>
 </html>
